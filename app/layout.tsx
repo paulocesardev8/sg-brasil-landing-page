@@ -1,18 +1,17 @@
-// Substitua todo o conteúdo do seu arquivo app/layout.tsx por este
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script"; // 1. Importamos o componente Script
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Paulo Cesar - Aulas de Tráfego Pago e IA",
-  description: "Aulas 1:1 para você aplicar agora, direto com quem vive disso todos os dias. Transforme cliques em vendas.",
+  title: "SG Brasil Porcelanato | Alto Padrão e Sofisticação",
+  description: "Curadoria exclusiva de porcelanatos em grandes formatos, marmorizados e amadeirados. O acabamento que sua obra merece.",
   openGraph: {
-    title: "Paulo Cesar - Aulas de Tráfego Pago e IA",
-    description: "Transforme cliques em vendas com aulas particulares e estratégicas.",
-    images: ['/images/paulo-hero-nova.jpg'],
+    title: "SG Brasil Porcelanato | Alto Padrão",
+    description: "Transforme seu ambiente com a elegância dos nossos porcelanatos.",
+    images: ['/images/og-image-sgbrasil.jpg'], // Certifique-se de ter uma imagem na pasta public
   },
 };
 
@@ -23,13 +22,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} bg-gray-950 text-white`}>
+      {/* Adicionamos o suppressHydrationWarning aqui para ignorar erros causados 
+          por extensões do navegador que injetam atributos no HTML 
+      */}
+      <body 
+        className={`${inter.className} bg-white text-black`} 
+        suppressHydrationWarning
+      >
         {children}
 
-        {/* --- INÍCIO DOS SCRIPTS DE RASTREAMENTO --- */}
+        {/* --- SCRIPTS DE RASTREAMENTO --- */}
 
-        {/* 2. GOOGLE TAG (ANALYTICS GA4) */}
-        {/* Substitua G-XXXXXXXXXX pelo seu ID da Métrica do Google */}
+        {/* GOOGLE TAG (GA4) 
         <Script 
           strategy="afterInteractive" 
           src={`https://www.googletagmanager.com/gtag/js?id=G-GYR5QWSWK2`}
@@ -45,10 +49,9 @@ export default function RootLayout({
               gtag('config', 'G-GYR5QWSWK2');
             `,
           }}
-        />
+        />*/}
 
-        {/* 3. META PIXEL (FACEBOOK/INSTAGRAM) */}
-        {/* Substitua YOUR_PIXEL_ID pelo seu ID do Pixel da Meta */}
+        {/* META PIXEL */}
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
@@ -67,17 +70,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <noscript>
-          <img 
-            height="1" 
-            width="1" 
-            style={{display:'none'}}
-            src={`https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1`}
-          />
-        </noscript>
-
-        {/* --- FIM DOS SCRIPTS DE RASTREAMENTO --- */}
-
       </body>
     </html>
   );

@@ -1,8 +1,6 @@
 import {
   Facebook,
-  Github,
-  Instagram,
-  Linkedin
+    Instagram,
 } from "lucide-react";
 
 export default function Footer() {
@@ -10,36 +8,20 @@ export default function Footer() {
     <footer className="bg-gray-950 text-gray-300 py-10 mt-20">
       <div className="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-6 text-center sm:text-left">
         <div>
-          <p className="text-lg font-semibold">Sintonia Solutions • Mentoria em Tráfego e IA</p>
+          <p className="text-lg font-semibold">SG Brasil Porcelanato • Porcelanatos com preço de fábrica</p>
           <p className="text-sm text-gray-400 mt-1">© {new Date().getFullYear()} Todos os direitos reservados.</p>
         </div>
         <div className="flex gap-4 text-lg">
           <a
-            href="https://www.instagram.com/sintoniasolutions/"
+            href="https://www.instagram.com/sgbrasilporcelanato/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white"
           >
             <Instagram size={20} />
-          </a>
+          </a> 
           <a
-            href="https://github.com/paulocesardev8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white"
-          >
-            <Github size={20} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/paulo-cesar-696a50158/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white"
-          >
-            <Linkedin size={20} />
-          </a>
-          <a
-            href="https://www.facebook.com/sintoniasolutions/"
+            href="https://www.facebook.com/sgbrasilporcelanato"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white"

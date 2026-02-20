@@ -1,8 +1,19 @@
 import Image from "next/image";
-import FormAgendamento from "./FormAgendamento";
-import { CheckCircleIcon, LightBulbIcon, ChatBubbleBottomCenterTextIcon, CpuChipIcon, RocketLaunchIcon, AdjustmentsHorizontalIcon, ChartBarIcon, PresentationChartLineIcon, SparklesIcon, UserGroupIcon  } from '@heroicons/react/24/solid';
+import FormAgendamento from "./FormAgendamento"; // Certifique-se que este arquivo existe
+import { 
+  CheckCircleIcon, 
+  LightBulbIcon, 
+  ChatBubbleBottomCenterTextIcon, 
+  CpuChipIcon, 
+  RocketLaunchIcon, 
+  AdjustmentsHorizontalIcon, 
+  ChartBarIcon, 
+  PresentationChartLineIcon, 
+  SparklesIcon, 
+  UserGroupIcon 
+} from '@heroicons/react/24/solid';
 
-// --- DADOS DE TODAS AS SEÇÕES ---
+// --- DADOS ---
 
 const roteiroAulas = [
   {
@@ -65,22 +76,35 @@ export default function HeroAula() {
   return (
     <>
       {/* SEÇÃO HERO (TOPO) */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 sm:px-10 py-16 text-center bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white overflow-hidden">
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 sm:px-10 py-16 text-center bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white overflow-hidden relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3b82f633,transparent)] -z-10"></div>
+        
         <h1 className="text-4xl sm:text-6xl font-extrabold leading-tight mb-8 max-w-4xl animate-fadeInUp">
           Transforme cliques em vendas com <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-700">Tráfego Pago e Inteligência Artificial</span>
         </h1>
+        
         <p className="text-lg sm:text-2xl text-gray-300 mb-8 max-w-2xl animate-fadeInUp animation-delay-200">
           Aulas 1:1 sob medida pra você aplicar agora, direto com quem vive disso todos os dias.
         </p>
-        <a href="#agendar" className="bg-green-600 hover:bg-green-500 text-white font-semibold py-4 px-10 rounded-full text-lg shadow-xl transition-all duration-300 animate-fadeInUp animation-delay-400 transform hover:scale-110 hover:shadow-green-500/50 relative group">
+        
+        <a href="#agendar" className="bg-green-600 hover:bg-green-500 text-white font-semibold py-4 px-10 rounded-full text-lg shadow-xl transition-all duration-300 animate-fadeInUp animation-delay-400 transform hover:scale-110 hover:shadow-green-500/50 relative group inline-block">
           <span className="relative z-10">💡 Quero aprender com você</span>
         </a>
+        
         <p className="text-sm text-gray-400 mt-4 animate-fadeInUp animation-delay-600">
           ⚡ Vagas limitadas por semana – atendimento individual
         </p>
+        
         <div className="mt-12 w-full max-w-xs sm:max-w-sm animate-fadeInUp animation-delay-800 rounded-full overflow-hidden shadow-2xl ring-4 ring-blue-800/50">
-          <Image src="/images/paulo-hero-nova.jpg" alt="Paulo Cesar, mentor especialista em tráfego pago e inteligência artificial" width={400} height={400} className="w-full h-auto object-cover" priority />
+          {/* Ajuste de largura/altura aqui é crucial se não usar fill */}
+          <Image 
+            src="/images/paulo-hero-nova.jpg" 
+            alt="Paulo Cesar, mentor especialista" 
+            width={400} 
+            height={400} 
+            className="w-full h-auto object-cover" 
+            priority 
+          />
         </div>
       </section>
 
@@ -91,9 +115,7 @@ export default function HeroAula() {
           Especialista em tráfego pago e IA com mais de <span className="text-white font-bold">5 anos de experiência</span> e <span className="text-white font-bold">+R$5 milhões gerenciados</span> em anúncios. Apaixonado por ensinar de forma simples e objetiva, entregando clareza e resultado desde a primeira aula.
         </p>
       </section>
-
-
-       {/* SEÇÃO "DIFERENCIAIS" */}
+      {/* SEÇÃO "DIFERENCIAIS" */}
       <section className="mt-32 max-w-5xl mx-auto px-6">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
           Por que essas aulas são diferentes?
@@ -109,36 +131,33 @@ export default function HeroAula() {
         </div>
       </section>
 
-
-<section className="mt-32 max-w-6xl mx-auto px-6">
-  <div className="text-center mb-16">
-    <h2 className="text-3xl sm:text-4xl font-bold">
-      Nosso Roteiro Para o Sucesso
-    </h2>
-    <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">
-      Um passo a passo completo, cobrindo tudo que você precisa para criar campanhas lucrativas e com estratégia.
-    </p>
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {roteiroAulas.map((topico, index) => (
-      <div key={index} className="bg-gray-900 p-8 rounded-2xl ring-1 ring-white/10 flex flex-col items-start transition-all duration-300 hover:ring-blue-500 hover:-translate-y-2">
-        {/* AQUI ESTÁ A MUDANÇA: Substituímos o número pelo ícone */}
-        <div className="bg-gray-800 p-3 rounded-lg self-start mb-6">
-          {topico.icon}
+      {/* SEÇÃO "ROTEIRO" */}
+      <section className="mt-32 max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl font-bold">
+            Nosso Roteiro Para o Sucesso
+          </h2>
+          <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">
+            Um passo a passo completo, cobrindo tudo que você precisa para criar campanhas lucrativas e com estratégia.
+          </p>
         </div>
-        <h3 className="text-xl font-semibold text-white mb-3">{topico.title}</h3>
-        <p className="text-gray-300 text-md">
-          {topico.description}
-        </p>
-      </div>
-    ))}
-  </div>
-</section>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {roteiroAulas.map((topico, index) => (
+            <div key={index} className="bg-gray-900 p-8 rounded-2xl ring-1 ring-white/10 flex flex-col items-start transition-all duration-300 hover:ring-blue-500 hover:-translate-y-2">
+              <div className="bg-gray-800 p-3 rounded-lg self-start mb-6">
+                {topico.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">{topico.title}</h3>
+              <p className="text-gray-300 text-md">
+                {topico.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
       
-
-
-      {/* SEÇÃO 'VOCÊ ESTÁ NO LUGAR CERTO SE...' (DOR VS DESEJO)*/}
+      {/* SEÇÃO 'VOCÊ ESTÁ NO LUGAR CERTO SE...' */}
       <section className="mt-32 max-w-5xl mx-auto px-6">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
           Você está no lugar certo se...
@@ -174,8 +193,9 @@ export default function HeroAula() {
           <p className="text-lg text-gray-300 mb-4">
             "Vou te pegar pela mão e te mostrar como fazer, como pensar e ser estratégico."
           </p>
-          <div className="w-full max-w-2xl mx-auto aspect-[9/16]">
-            <iframe className="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/wTXEb5RwW5o?si=mXNU-Ic4svjQQql0" title="Explicação das aulas de tráfego" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
+          <div className="w-full max-w-2xl mx-auto aspect-[9/16] md:aspect-video">
+             {/* Ajustei o aspect ratio para ser responsivo (vertical no mobile, video no desk se preferir, ou mantem 9/16 se for um Short) */}
+            <iframe className="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/5X1TDEdmVGg?rel=0&modestbranding=1" title="Explicação das aulas" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
           </div>
           <p className="text-md text-gray-500 mt-4">
             No vídeo acima, eu detalho o método que vamos aplicar, cobrindo desde a configuração da sua conta até a otimização e escala das suas campanhas.
@@ -233,15 +253,12 @@ export default function HeroAula() {
             </p>
           </div>
 
-          {/* Grid para os depoimentos em vídeo */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">       
-
-            {/* --- Card do Rafael (Escrito Diretamente) --- */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">      
+            {/* Card Rafael */}
             <div className="bg-gray-900 rounded-2xl p-6 ring-1 ring-white/10 shadow-lg">
               <div className="w-full max-w-2xl mx-auto aspect-[9/16]">
-            <iframe className="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/stDFx9zhY7A?si=aTP-m2WIkzkHoH5w" title="Rafael, depoimento" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
-          </div>
-
+                <iframe className="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/stDFx9zhY7A?si=aTP-m2WIkzkHoH5w" title="Rafael, depoimento" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
+              </div>
               <blockquote className="mt-6 text-xl text-gray-200 italic">
                 “A mentoria dele abriu o leque e me deu o direcionamento que faltava.”
               </blockquote>
@@ -249,30 +266,48 @@ export default function HeroAula() {
               <p className="text-sm text-blue-400">Hipnoterapeuta</p>
             </div>
 
-
-
-            {/* --- Card do Osires (Escrito Diretamente) --- */}
+            {/* Card Osires */}
             <div className="bg-gray-900 rounded-2xl p-6 ring-1 ring-white/10 shadow-lg">
-            <div className="w-full max-w-2xl mx-auto aspect-[9/16]">
-            <iframe className="w-full h-full rounded-lg shadow-lg" src="https://youtube.com/embed/1T2ZvgThsxY?si=IdU0sogcp5X6-Bnr" title="Osires, depoimento" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
-          </div>
-
+              <div className="w-full max-w-2xl mx-auto aspect-[9/16]">
+                <iframe className="w-full h-full rounded-lg shadow-lg" src="https://youtube.com/embed/1T2ZvgThsxY?si=IdU0sogcp5X6-Bnr" title="Osires, depoimento" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
+              </div>
               <blockquote className="mt-6 text-xl text-gray-200 italic">
                 “Aprendi a anunciar do zero e gerei vendas de sessões de acupuntura.”
               </blockquote>
-
               <p className="mt-4 font-semibold text-white">Osires</p>
               <p className="text-sm text-blue-400">Professor e Acupunturista</p>
             </div>
+
+                        {/* Card Tom */}
+            <div className="bg-gray-900 rounded-2xl p-6 ring-1 ring-white/10 shadow-lg">
+              <div className="w-full max-w-2xl mx-auto aspect-[9/16]">
+                <iframe className="w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/vAMwz-Ql2HE?rel=0&modestbranding=1" title="Osires, depoimento" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen loading="lazy"></iframe>
+              </div>
+              <blockquote className="mt-6 text-xl text-gray-200 italic">
+                “Contratei agências e não tive o resultado que o Paulo me trouxe.”
+              </blockquote>
+              <p className="mt-4 font-semibold text-white">Tom</p>
+              <p className="text-sm text-blue-400">Fisioterapeuta</p>
+            </div>
           </div>
+
           <div className="text-center my-16">
             <p className="text-gray-500">E muitas outras histórias de sucesso...</p>
           </div>
+
+          {/* Depoimentos Texto */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {depoimentos.filter(d => d.tipo === 'texto').map(depoimento => (
                 <div key={depoimento.nome} className="bg-gray-900 p-8 rounded-2xl flex flex-col items-center text-center">
                     <div className="w-24 h-24 rounded-full bg-gray-700 mb-4 ring-4 ring-blue-500/50 overflow-hidden relative">
-                        {depoimento.imagemUrl && ( <Image src={depoimento.imagemUrl} alt={`Foto de ${depoimento.nome}`} layout="fill" className="object-cover"/> )}
+                        {depoimento.imagemUrl && ( 
+                          <Image 
+                            src={depoimento.imagemUrl} 
+                            alt={`Foto de ${depoimento.nome}`} 
+                            fill 
+                            className="object-cover"
+                          /> 
+                        )}
                     </div>
                     <blockquote className="text-lg text-gray-300 flex-grow">“{depoimento.fraseDestaque}”</blockquote>
                     <footer className="mt-6">
@@ -291,7 +326,10 @@ export default function HeroAula() {
         <p className="text-gray-100 mb-8 text-md text-center">
           Preencha com seu melhor contato para agendar sua aula 1:1 diretamente comigo no WhatsApp.
         </p>
+        
+        {/* Verifica se o componente existe antes de usar */}
         <FormAgendamento />
+        
         <p className="text-xs text-gray-200 mt-4 text-center">
           Você será redirecionado para o WhatsApp assim que preencher. Sem compromisso.
         </p>
