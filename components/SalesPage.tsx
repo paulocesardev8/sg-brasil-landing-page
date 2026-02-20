@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import { 
   CheckCircleIcon, 
@@ -10,9 +11,9 @@ import {
 
 // --- DADOS DA EMPRESA ---
 const empresa = {
-  whatsappLink: "https://wa.me/5519996622666",
+  whatsappLink: "https://wa.me/5519996622666?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20SG%20Brasil%20e%20gostaria%20de%20falar%20com%20um%20especialista%20para%20solicitar%20um%20or%C3%A7amento.",
   instagram: "https://www.instagram.com/sgbrasilporcelanato/"
-};
+}; 
 
 // --- DADOS DE CONTEÚDO ---
 const modulos = [
@@ -22,8 +23,7 @@ const modulos = [
   { numero: "04", titulo: "Cálculo de Precisão", desc: "Ajudamos a calcular a metragem exata com margem de segurança, evitando desperdícios." },
   { numero: "05", titulo: "Showroom Exclusivo", desc: "Ambientes montados para você visualizar o resultado final da sua obra." },
 ];
-
-// --- ATUALIZADO PARA .WEBP ---
+ 
 const ambientes = [
   { nome: "Comercial", img: "/images/comercial.webp", desc: "Resistência para alto tráfego" },
   { nome: "Externo", img: "/images/externa.webp", desc: "Antiderrapante e durável" },
@@ -31,8 +31,7 @@ const ambientes = [
   { nome: "Cozinha", img: "/images/cozinha.webp", desc: "Praticidade na limpeza" },
   { nome: "Quarto", img: "/images/quarto.webp", desc: "Aconchego premium" },
 ];
-
-// --- ATUALIZADO PARA .WEBP ---
+ 
 const colecoes = [
   { nome: "Madeiras", img: "/images/madeira-colecao.webp", desc: "Aconchego natural" },
   { nome: "Mármores", img: "/images/marmore-colecao.webp", desc: "Clássico atemporal" },
@@ -40,6 +39,20 @@ const colecoes = [
 ];
 
 export default function SalesPage() {
+  
+  // FUNÇÃO ROBUSTA DE SCROLL SUAVE
+  const scrollToContato = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const section = document.getElementById('contato');
+    if (section) {
+      // Usa window.scrollTo em vez de scrollIntoView para evitar bugs do Chrome
+      window.scrollTo({
+        top: section.offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="bg-[#FFFFFF] min-h-screen text-[#000000] font-sans selection:bg-[#D12018] selection:text-white">
       
@@ -67,9 +80,14 @@ export default function SalesPage() {
           <p className="text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-medium drop-shadow-md">
             Porcelanatos de <span className="text-white">alto padrão</span> que unem a resistência da tecnologia com a beleza natural das pedras.
           </p>
-          <a href={empresa.whatsappLink} className="bg-[#D12018] hover:bg-[#b01a14] text-white font-bold py-5 px-12 rounded-xl text-xl shadow-2xl transition-all transform hover:scale-105 inline-block">
-            FALE COM UM ESPECIALISTA
-          </a>
+          
+          {/* BOTÃO HERO ATUALIZADO (Agora é um <button> de verdade para não interferir na rota) */}
+          <button 
+            onClick={scrollToContato}
+            className="bg-[#D12018] hover:bg-[#b01a14] text-white font-bold py-5 px-12 rounded-xl text-xl shadow-2xl transition-all transform hover:scale-105 inline-block cursor-pointer"
+          >
+            SAIBA MAIS
+          </button>
         </div>
       </section>
 
@@ -102,23 +120,20 @@ export default function SalesPage() {
         </div>
       </section>
 
-      {/* 3. SEÇÃO AMBIENTES (ATUALIZADA: .WEBP + ROTAÇÃO CORRETA) */}
-      <section className="w-full bg-black relative border-t border-b border-gray-800">
-        
-        {/* Cabeçalho da Seção */}
+      {/* 3. SEÇÃO AMBIENTES */}
+      <section className="w-full bg-black relative border-t border-b border-gray-800"> 
         <div className="bg-white py-12 px-6 text-center">
             <h2 className="text-4xl font-black uppercase tracking-tighter text-black">
               Ambientes <span className="text-[#D12018]">Inspiradores</span>
             </h2>
             <p className="text-gray-500 mt-2">Escolha onde você quer aplicar a excelência SG Brasil</p>
         </div>
-
-        {/* Container Flexível Expansivo */}
+ 
         <div className="flex flex-col md:flex-row w-full h-[70vh] md:h-[80vh]">
           {ambientes.map((amb, i) => (
             <div 
               key={i} 
-              className="relative flex-1 transition-all duration-700 ease-in-out hover:flex-[3] group overflow-hidden border-b md:border-b-0 md:border-r border-white/20 last:border-0 cursor-pointer"
+              className="relative flex-1 transition-all duration-700 ease-in-out hover:flex-[3] group overflow-hidden border-b md:border-b-0 md:border-r border-white/20 last:border-0"
             >
               <Image 
                 src={amb.img} 
@@ -128,13 +143,10 @@ export default function SalesPage() {
               />
               <div className="absolute inset-0 bg-black/60 group-hover:bg-black/20 transition-all duration-500" />
               
-              <div className="absolute inset-0 flex flex-col items-center justify-center md:justify-end md:pb-16 p-4">
-                
-                {/* TÍTULO COM ROTAÇÃO CORRETA (Vertical -> Horizontal) */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center md:justify-end md:pb-16 p-4"> 
                 <h3 className="
                     text-white font-black text-2xl md:text-4xl uppercase tracking-[0.2em]
-                    whitespace-nowrap
-                    transition-all duration-500 ease-in-out
+                    whitespace-nowrap transition-all duration-500 ease-in-out
                     md:-rotate-90 group-hover:rotate-0
                     group-hover:text-[#BA8213] group-hover:mb-4 
                     shadow-black drop-shadow-lg
@@ -146,9 +158,14 @@ export default function SalesPage() {
                   <p className="text-white text-sm md:text-lg font-medium mb-6 drop-shadow-md text-center max-w-xs">
                     {amb.desc}
                   </p>
-                  <span className="bg-[#D12018] text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-[#D12018] transition-colors">
-                    SAIBA MAIS
-                  </span>
+                  
+                  {/* BOTÃO AMBIENTES ATUALIZADO */}
+                  <button 
+                    onClick={scrollToContato}
+                    className="bg-[#D12018] text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-[#D12018] transition-colors cursor-pointer"
+                  >
+                  SAIBA MAIS
+                  </button>                
                 </div>
               </div>
             </div>
@@ -156,7 +173,7 @@ export default function SalesPage() {
         </div>
       </section>
 
-      {/* 4. SEÇÃO COLEÇÕES (ATUALIZADA: .WEBP) */}
+      {/* 4. SEÇÃO COLEÇÕES */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
            <div className="text-center mb-16">
@@ -181,9 +198,8 @@ export default function SalesPage() {
       </section>
 
       {/* 5. CTA FINAL */}
-      <section className="py-24 px-6 bg-[#f8f8f8]">
-        <div className="max-w-4xl mx-auto bg-[#000000] rounded-[40px] p-8 sm:p-16 shadow-2xl relative overflow-hidden border-4 border-gray-100">
-          
+      <section id="contato" className="py-24 px-6 bg-[#f8f8f8]">
+        <div className="max-w-4xl mx-auto bg-[#000000] rounded-[40px] p-8 sm:p-16 shadow-2xl relative overflow-hidden border-4 border-gray-100"> 
           <div className="absolute top-0 right-0 bg-[#D12018] text-white font-bold px-8 py-3 rounded-bl-3xl tracking-widest text-xs uppercase">
             SG Brasil Porcelanato
           </div>
@@ -219,6 +235,8 @@ export default function SalesPage() {
           <div className="text-center relative z-10">
             <a 
               href={empresa.whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full md:w-auto inline-block bg-[#D12018] hover:bg-[#b01a14] text-white font-black py-5 px-10 rounded-xl text-xl shadow-xl transition-all transform hover:-translate-y-1"
             >
               FALAR COM UM ESPECIALISTA

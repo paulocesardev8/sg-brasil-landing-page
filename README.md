@@ -1,45 +1,39 @@
-# Portfólio Pessoal (Primeira Versão)
+# SG Brasil Porcelanato - Landing Page
 
-Este projeto foi desenvolvido como a primeira versão do meu portfólio profissional, utilizando tecnologias modernas do ecossistema JavaScript e Python. Mesmo tendo evoluído visualmente desde então, esta versão representa minha trajetória, aprendizado e habilidades práticas no desenvolvimento web.
+Landing page de alto padrão desenvolvida para a SG Brasil Porcelanato. Focada em conversão, demonstração de autoridade e vitrine de produtos (grandes formatos, marmorizados e amadeirados).
 
-## ✨ Funcionalidades
+## 🚀 Tecnologias Utilizadas
 
-- Layout responsivo com **Next.js** + **Tailwind CSS**
-- Animações com **AOS (Animate On Scroll)**
-- Sessão Hero com imagem, texto e botões
-- Cards animados com destaques de projetos
-- Seção de tecnologias com ícones SVG
-- Organização clara de código e componentes reutilizáveis
+* **[Next.js](https://nextjs.org/)** (App Router)
+* **[React](https://react.dev/)**
+* **[Tailwind CSS](https://tailwindcss.com/)** (Estilização utilitária)
+* **[Heroicons](https://heroicons.com/)** (Ícones SVG)
 
-## 🧠 Tecnologias Utilizadas
+## ⚙️ Como rodar o projeto localmente
 
-- Next.js 15
-- React
-- Tailwind CSS
-- AOS (Animate On Scroll)
-- TypeScript
-- Flask (em projeto paralelo)
-- Git e GitHub
+1. Clone o repositório:
+\`\`\`bash
+git clone https://github.com/paulocesardev8/sg-brasil-landing-page.git
+\`\`\`
 
-## 📌 Motivação
-
-Este portfólio foi criado com o objetivo de apresentar minha atuação como estrategista digital, especialista em tráfego pago, IA e automações inteligentes. Com ele, pude aplicar minhas habilidades técnicas e consolidar um layout funcional, ainda que posteriormente tenha optado por evoluir o visual para um formato mais moderno e centralizado.
-
-## 📷 Prévia
-
-![screenshot](./public/images/paulo.png)
-
-## 🚀 Como rodar localmente
-
-```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-cd nome-do-repositorio
+2. Instale as dependências:
+\`\`\`bash
 npm install
+\`\`\`
+
+3. Inicie o servidor de desenvolvimento:
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
-Acesse: [http://localhost:3000](http://localhost:3000)
+4. Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 
----
+## 📦 Deploy (HostGator / Servidor Estático)
 
-**🧭 Observação**: Este projeto representa um estágio importante da minha evolução como desenvolvedor front-end e estrategista digital. Recomendo também visitar a [nova versão do meu portfólio](#) com visual ainda mais refinado e interativo.
+Este projeto está configurado para exportação estática (`output: 'export'` no `next.config.ts`), ideal para hospedagens compartilhadas (cPanel). 
+
+Para gerar os arquivos finais de produção:
+\`\`\`bash
+npm run build
+\`\`\`
+O site compilado em HTML/CSS/JS puro estará disponível na pasta `out/`.
