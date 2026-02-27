@@ -70,6 +70,17 @@ export default function SalesPage() {
         </div>
 
         <div className="relative z-20 text-center max-w-5xl">
+{/* LOGO OFICIAL COM SOMBRA/BRILHO BRANCO */}
+          <div className="mb-8 flex justify-center">
+            <Image 
+              src="/images/logo-branca.png" /* a sua logo original preta e vermelha */
+              alt="Logo SG Brasil Porcelanato" 
+              width={250} 
+              height={100} 
+              // Esse drop-shadow abaixo cria o "Glow" branco ao redor da imagem!
+              className="object-contain]"
+            />
+          </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-[#BA8213]/50 text-[#BA8213] text-sm font-semibold mb-8 backdrop-blur-md">
             <StarIcon className="w-4 h-4" />
             <span> REFERÊNCIA EM ALTO PADRÃO</span>
@@ -196,7 +207,7 @@ export default function SalesPage() {
            </div>
         </div>
       </section>
-
+  
       {/* 5. CTA FINAL */}
       <section id="contato" className="py-24 px-6 bg-[#f8f8f8]">
         <div className="max-w-4xl mx-auto bg-[#000000] rounded-[40px] p-8 sm:p-16 shadow-2xl relative overflow-hidden border-4 border-gray-100"> 
@@ -247,6 +258,41 @@ export default function SalesPage() {
           </div>
         </div>
       </section>
+
+      {/* NOVA SEÇÃO: MAPA (ANTES DO RODAPÉ) */}
+      <section className="bg-gray-50 py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-black text-black uppercase tracking-tighter mb-2">
+              Venha visitar nosso <span className="text-[#D12018]">Showroom</span>
+            </h2>
+            <p className="text-gray-600 font-medium">Estamos de portas abertas para te receber. Veja como chegar:</p>
+          </div>
+          
+          <div className="w-full h-[400px] rounded-3xl overflow-hidden shadow-xl border-4 border-white relative">
+            <iframe 
+              /* COLE O LINK DO MAPA DO GOOGLE AQUI DENTRO DO SRC */
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1355.9083110831991!2d-47.53949436662839!3d-22.44545276181219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c7d1a4471d627f%3A0x37252793da91cbb6!2sSG%20BRASIL%20PORCELANATO!5e1!3m2!1spt-BR!2sbr!4v1772117940646!5m2!1spt-BR!2sbr" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+       <div className="mb-8 flex justify-center">
+            <Image 
+              src="/images/logo.png" /* Puxando a versão toda branca! */
+              alt="Logo SG Brasil Porcelanato" 
+              width={250} 
+              height={100} 
+              className="object-contain"
+            />
+          </div>
 
     </div>
   );
