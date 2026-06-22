@@ -40,6 +40,12 @@ const colecoes = [
 
 export default function SalesPage() {
   
+  const handleWhatsAppClick = () => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Contact');
+    }
+  };
+
   // FUNÇÃO ROBUSTA DE SCROLL SUAVE
   const scrollToContato = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -244,10 +250,11 @@ export default function SalesPage() {
           </div>
 
           <div className="text-center relative z-10">
-            <a 
+            <a
               href={empresa.whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               className="w-full md:w-auto inline-block bg-[#D12018] hover:bg-[#b01a14] text-white font-black py-5 px-10 rounded-xl text-xl shadow-xl transition-all transform hover:-translate-y-1"
             >
               FALAR COM UM ESPECIALISTA
