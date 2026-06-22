@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; 
+import { Inter } from "next/font/google";
 import "./globals.css";
+import MetaPixel from "@/components/MetaPixel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,8 @@ export default function RootLayout({
         className={`${inter.className} bg-white text-black`} 
         suppressHydrationWarning
       >
-        {children} 
+        <MetaPixel />
+        {children}
       </body>
     </html>
   );
