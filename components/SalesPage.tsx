@@ -40,9 +40,18 @@ const colecoes = [
 
 export default function SalesPage() {
   
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const url = empresa.whatsappLink;
     if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Contact');
+      (window as any).fbq('track', 'Contact', {}, {
+        eventID: 'whatsapp-click',
+        callback: () => { window.open(url, '_blank'); }
+      });
+      // fallback: abre após 300ms caso o callback não dispare
+      setTimeout(() => { window.open(url, '_blank'); }, 300);
+    } else {
+      window.open(url, '_blank');
     }
   };
 
@@ -252,7 +261,6 @@ export default function SalesPage() {
           <div className="text-center relative z-10">
             <a
               href={empresa.whatsappLink}
-              target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
               className="w-full md:w-auto inline-block bg-[#D12018] hover:bg-[#b01a14] text-white font-black py-5 px-10 rounded-xl text-xl shadow-xl transition-all transform hover:-translate-y-1"
