@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import MetaPixel from "@/components/MetaPixel";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "SG Brasil Porcelanato | Alto Padrão e Sofisticação",
+  description: "Curadoria exclusiva de porcelanatos em grandes formatos, marmorizados e amadeirados. O acabamento que sua obra merece.",
+  openGraph: {
+    title: "SG Brasil Porcelanato | Alto Padrão",
+    description: "Transforme seu ambiente com a elegância dos nossos porcelanatos.",
+    images: ['/images/og-image-sgbrasil.jpg'],
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="pt-BR" className="scroll-smooth">
+      <body
+        className={`${inter.className} bg-white text-black`}
+        suppressHydrationWarning
+      >
+        <MetaPixel />
+        {children}
+      </body>
+    </html>
+  );
+}
