@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code local state
+.claude/
+
+# materiais de marketing (não vão pro repo — pesados)
+SG BRASIL PORCELANATO-LANDING PAGE/
+SG BRASIL PORCELANATO/
+01-node_modules/

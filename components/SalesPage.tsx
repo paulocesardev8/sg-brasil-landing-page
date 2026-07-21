@@ -1,12 +1,14 @@
 "use client"
 import Image from "next/image";
-import { 
-  CheckCircleIcon, 
+import Link from "next/link";
+import {
+  CheckCircleIcon,
   StarIcon,
   ArrowRightIcon,
   TruckIcon,
   UserGroupIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/solid';
 
 // --- DADOS DA EMPRESA ---
@@ -71,6 +73,30 @@ export default function SalesPage() {
   return (
     <div className="bg-[#FFFFFF] min-h-screen text-[#000000] font-sans selection:bg-[#D12018] selection:text-white">
       
+      {/* 0. HEADER STICKY — logo centralizado + botão da loja à direita */}
+      <header className="bg-black text-white sticky top-0 z-50 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-3 relative flex items-center justify-center">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/logo-branca.png"
+              alt="SG Brasil Porcelanato"
+              width={200}
+              height={80}
+              className="object-contain h-10 md:h-14 w-auto"
+              priority
+            />
+          </Link>
+          <Link
+            href="/loja"
+            className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 inline-flex items-center gap-1.5 md:gap-2 text-[10px] md:text-xs font-black uppercase tracking-widest text-white bg-[#D12018] hover:bg-[#b01a14] px-2.5 md:px-4 py-1.5 md:py-2 rounded-full transition-colors"
+          >
+            <ShoppingBagIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="hidden sm:inline">Loja de Nichos</span>
+            <span className="sm:hidden">Loja</span>
+          </Link>
+        </div>
+      </header>
+
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[90vh] flex items-center justify-center px-6 overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
@@ -223,6 +249,84 @@ export default function SalesPage() {
         </div>
       </section>
   
+      {/* 4.5 LOJA DE NICHOS — canal complementar de venda por peça */}
+      <section className="relative py-20 md:py-28 px-6 bg-black overflow-hidden border-t border-white/5">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+          {/* Coluna esquerda — texto */}
+          <div>
+            <span className="inline-flex items-center gap-2 bg-[#D12018] text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest mb-5">
+              <ShoppingBagIcon className="w-3.5 h-3.5" />
+              Novo canal
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight mb-5 leading-[1.05]">
+              Precisa apenas de <span className="text-[#D12018]">nichos?</span><br />
+              Compre online.
+            </h2>
+            <p className="text-gray-300 text-base md:text-lg font-medium mb-8 max-w-lg leading-relaxed">
+              Nichos de porcelanato por peça, com entrega própria em todo o
+              <strong className="text-white"> Estado de São Paulo</strong>. Sem cotação prévia:
+              escolha os produtos, informe a quantidade e receba o orçamento direto no WhatsApp.
+            </p>
+
+            {/* Diferenciais rápidos */}
+            <div className="grid grid-cols-2 gap-3 mb-8 max-w-lg">
+              <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                <CheckCircleIcon className="w-5 h-5 text-[#BA8213] shrink-0" />
+                <span>Preço por unidade</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                <TruckIcon className="w-5 h-5 text-[#BA8213] shrink-0" />
+                <span>Frete calculado</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                <StarIcon className="w-5 h-5 text-[#BA8213] shrink-0" />
+                <span>Iris e Decora</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                <ShieldCheckIcon className="w-5 h-5 text-[#BA8213] shrink-0" />
+                <span>Direto da fábrica</span>
+              </div>
+            </div>
+
+            <Link
+              href="/loja"
+              className="inline-flex items-center gap-3 bg-[#D12018] hover:bg-[#b01a14] text-white font-black py-4 px-8 rounded-xl text-base md:text-lg uppercase tracking-wide transition-all hover:-translate-y-0.5 shadow-2xl"
+            >
+              Ir para a loja de nichos
+              <ArrowRightIcon className="w-5 h-5" />
+            </Link>
+
+            <p className="text-xs text-gray-500 mt-5 uppercase tracking-widest font-bold">
+              Projeto por m²? Continue conosco pelo WhatsApp
+            </p>
+          </div>
+
+          {/* Coluna direita — vídeo dos nichos rodando (destaque visual) */}
+          <Link
+            href="/loja"
+            className="group relative block aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 hover:border-[#D12018] transition-all"
+          >
+            <video
+              src="/videos/hero/nichos-loop.mp4"
+              poster="/videos/hero/nichos-poster.jpg"
+              autoPlay
+              muted
+              playsInline
+              loop
+              preload="auto"
+              disablePictureInPicture
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Overlay sutil no hover pra dar sensação de clique */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+            <span className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+              <ArrowRightIcon className="w-3 h-3" />
+              Ver na loja
+            </span>
+          </Link>
+        </div>
+      </section>
+
       {/* 5. CTA FINAL */}
       <section id="contato" className="py-24 px-6 bg-[#f8f8f8]">
         <div className="max-w-4xl mx-auto bg-[#000000] rounded-[40px] p-8 sm:p-16 shadow-2xl relative overflow-hidden border-4 border-gray-100"> 
