@@ -39,12 +39,12 @@ export default function NichoPersonalizadoCard({ titulo, subtitulo, onClick, cla
       </span>
 
       <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
-        {/* Ícone régua/compasso */}
+        {/* Ícone régua com marcações — símbolo claro de "medida sob medida" */}
         <div className="shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#BA8213]/15 border border-[#BA8213]/30 flex items-center justify-center">
           <svg
-            width="36"
-            height="36"
-            viewBox="0 0 24 24"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
             fill="none"
             stroke="#BA8213"
             strokeWidth="1.8"
@@ -52,11 +52,18 @@ export default function NichoPersonalizadoCard({ titulo, subtitulo, onClick, cla
             strokeLinejoin="round"
             aria-hidden="true"
           >
-            <path d="M3 21l6-6" />
-            <path d="M14.5 5.5l4 4" />
-            <path d="M9 15l6-6 4 4-6 6z" />
-            <path d="M6 20l-3 1 1-3" />
-            <path d="M17.5 3.5a2.12 2.12 0 013 3l-1 1-3-3z" />
+            {/* Corpo da régua (rotacionada 30 graus pra ficar dinâmica) */}
+            <g transform="rotate(-30 20 20)">
+              <rect x="4" y="16" width="32" height="8" rx="1" />
+              {/* Marcações (traços de medida) */}
+              <line x1="9" y1="16" x2="9" y2="19" />
+              <line x1="13" y1="16" x2="13" y2="21" />
+              <line x1="17" y1="16" x2="17" y2="19" />
+              <line x1="21" y1="16" x2="21" y2="21" />
+              <line x1="25" y1="16" x2="25" y2="19" />
+              <line x1="29" y1="16" x2="29" y2="21" />
+              <line x1="33" y1="16" x2="33" y2="19" />
+            </g>
           </svg>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   aberto: boolean;
@@ -8,6 +8,17 @@ type Props = {
 };
 
 type BordaOpcao = "simples" | "dupla" | "nao-sei";
+
+type ItemNicho = {
+  id: string;
+  largura: string;
+  altura: string;
+  profundidade: string;
+  cor: string;
+  corOutra: string;
+  borda: BordaOpcao | "";
+  quantidade: string;
+};
 
 const WHATSAPP = "5519996622666";
 
@@ -32,55 +43,78 @@ const LOCAIS = [
   "Outro",
 ];
 
+const BORDA_LABEL: Record<BordaOpcao, string> = {
+  simples: "Borda simples",
+  dupla: "Borda dupla",
+  "nao-sei": "Não sei / me orientem",
+};
+
+function novoItem(): ItemNicho {
+  return {
+    id: (typeof crypto !== "undefined" && "randomUUID" in crypto)
+      ? crypto.randomUUID()
+      : String(Date.now() + Math.random()),
+    largura: "",
+    altura: "",
+    profundidade: "",
+    cor: "",
+    corOutra: "",
+    borda: "",
+    quantidade: "1",
+  };
+}
+
+function itemOk(i: ItemNicho): boolean {
+  const dimsOk = Number(i.largura) > 0 && Number(i.altura) > 0 && Number(i.profundidade) > 0;
+  const corOk = i.cor && (i.cor !== "Outra cor" || i.corOutra.trim().length >= 2);
+  return Boolean(dimsOk && corOk && i.borda !== "" && Number(i.quantidade) > 0);
+}
+
 function formatarCEP(v: string): string {
   const nums = v.replace(/\D/g, "").slice(0, 8);
   if (nums.length <= 5) return nums;
   return `${nums.slice(0, 5)}-${nums.slice(5)}`;
 }
 
-function montarMensagem(dados: {
-  largura: string;
-  altura: string;
-  profundidade: string;
-  cor: string;
-  corOutra: string;
-  borda: BordaOpcao;
-  quantidade: string;
-  local: string;
-  tamanhoParede: string;
-  observacoes: string;
-  nome: string;
-  cep: string;
-  endereco: string;
-  cidade: string;
-}): string {
-  const corFinal =
-    dados.cor === "Outra cor" && dados.corOutra.trim()
-      ? `Outra cor — ${dados.corOutra.trim()}`
-      : dados.cor;
-
-  const bordaLabel: Record<BordaOpcao, string> = {
-    simples: "Borda simples",
-    dupla: "Borda dupla",
-    "nao-sei": "Não sei / me orientem",
-  };
-
+function montarMensagem(
+  items: ItemNicho[],
+  contexto: { local: string; tamanhoParede: string; observacoes: string },
+  dados: { nome: string; cep: string; endereco: string; cidade: string }
+): string {
   const linhas: string[] = [
-    "Olá! Gostaria de um *NICHO PERSONALIZADO* com as seguintes especificações:",
+    "Olá! Gostaria de um *ORÇAMENTO DE NICHOS SOB MEDIDA* com as seguintes especificações:",
     "",
-    "*ESPECIFICAÇÕES:*",
-    `Dimensões: ${dados.largura} × ${dados.altura} × ${dados.profundidade} cm`,
-    `Cor/modelo: ${corFinal}`,
-    `Tipo de borda: ${bordaLabel[dados.borda]}`,
-    `Quantidade: ${dados.quantidade} ${Number(dados.quantidade) > 1 ? "unidades" : "unidade"}`,
   ];
 
-  const temContexto = dados.local || dados.tamanhoParede.trim() || dados.observacoes.trim();
+  const totalItens = items.reduce((s, i) => s + (Number(i.quantidade) || 0), 0);
+  linhas.push(`*ESPECIFICAÇÕES — ${items.length} ${items.length === 1 ? "modelo" : "modelos"}:*`);
+
+  items.forEach((i, idx) => {
+    const corFinal =
+      i.cor === "Outra cor" && i.corOutra.trim()
+        ? `Outra cor — ${i.corOutra.trim()}`
+        : i.cor;
+    const un = Number(i.quantidade) > 1 ? "unidades" : "unidade";
+    linhas.push(
+      "",
+      `► *Nicho ${idx + 1}*`,
+      `  Dimensões: ${i.largura} × ${i.altura} × ${i.profundidade} cm`,
+      `  Cor/modelo: ${corFinal}`,
+      `  Tipo de borda: ${BORDA_LABEL[i.borda as BordaOpcao]}`,
+      `  Quantidade: ${i.quantidade} ${un}`,
+    );
+  });
+
+  linhas.push("", `*Total geral:* ${totalItens} ${totalItens === 1 ? "peça" : "peças"}`);
+
+  const temContexto =
+    contexto.local || contexto.tamanhoParede.trim() || contexto.observacoes.trim();
   if (temContexto) {
     linhas.push("", "*PROJETO:*");
-    if (dados.local) linhas.push(`Local de instalação: ${dados.local}`);
-    if (dados.tamanhoParede.trim()) linhas.push(`Tamanho da parede: ${dados.tamanhoParede.trim()}`);
-    if (dados.observacoes.trim()) linhas.push(`Obs: ${dados.observacoes.trim()}`);
+    if (contexto.local) linhas.push(`Local de instalação: ${contexto.local}`);
+    if (contexto.tamanhoParede.trim())
+      linhas.push(`Tamanho da parede: ${contexto.tamanhoParede.trim()}`);
+    if (contexto.observacoes.trim()) linhas.push(`Obs: ${contexto.observacoes.trim()}`);
   }
 
   linhas.push(
@@ -98,21 +132,12 @@ function montarMensagem(dados: {
 }
 
 export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
-  // Especificações
-  const [largura, setLargura] = useState("");
-  const [altura, setAltura] = useState("");
-  const [profundidade, setProfundidade] = useState("");
-  const [cor, setCor] = useState("");
-  const [corOutra, setCorOutra] = useState("");
-  const [borda, setBorda] = useState<BordaOpcao | "">("");
-  const [quantidade, setQuantidade] = useState("1");
+  const [items, setItems] = useState<ItemNicho[]>([novoItem()]);
 
-  // Contexto (opcional)
   const [local, setLocal] = useState("");
   const [tamanhoParede, setTamanhoParede] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
-  // Dados
   const [nome, setNome] = useState("");
   const [cep, setCep] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -120,7 +145,6 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
   const [buscandoCep, setBuscandoCep] = useState(false);
   const [cepErro, setCepErro] = useState<string | null>(null);
 
-  // ESC + scroll lock
   useEffect(() => {
     if (!aberto) return;
     const original = document.body.style.overflow;
@@ -133,7 +157,6 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
     };
   }, [aberto, onFechar]);
 
-  // Autocomplete CEP via ViaCEP
   useEffect(() => {
     const cepLimpo = cep.replace(/\D/g, "");
     if (cepLimpo.length !== 8) {
@@ -169,11 +192,24 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
     };
   }, [cep]);
 
-  const dimensoesOk =
-    Number(largura) > 0 && Number(altura) > 0 && Number(profundidade) > 0;
-  const corOk = cor && (cor !== "Outra cor" || corOutra.trim().length >= 2);
-  const especificacoesOk =
-    dimensoesOk && corOk && borda !== "" && Number(quantidade) > 0;
+  const atualizarItem = <K extends keyof ItemNicho>(id: string, campo: K, valor: ItemNicho[K]) => {
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [campo]: valor } : it)));
+  };
+
+  const adicionarNicho = () => {
+    setItems((prev) => [...prev, novoItem()]);
+    // Rola até o novo item depois do render
+    setTimeout(() => {
+      const container = document.getElementById("nicho-modal-body");
+      if (container) container.scrollTop = container.scrollHeight;
+    }, 50);
+  };
+
+  const removerNicho = (id: string) => {
+    setItems((prev) => (prev.length > 1 ? prev.filter((it) => it.id !== id) : prev));
+  };
+
+  const especificacoesOk = items.length > 0 && items.every(itemOk);
   const dadosOk =
     nome.trim().length >= 2 &&
     cep.replace(/\D/g, "").length === 8 &&
@@ -181,26 +217,21 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
     cidade.trim().length >= 2;
   const podeEnviar = especificacoesOk && dadosOk;
 
+  const totalPecas = items.reduce((s, i) => s + (Number(i.quantidade) || 0), 0);
+
   const handleEnviar = () => {
     if (!podeEnviar) return;
-    const msg = montarMensagem({
-      largura,
-      altura,
-      profundidade,
-      cor,
-      corOutra,
-      borda: borda as BordaOpcao,
-      quantidade,
-      local,
-      tamanhoParede,
-      observacoes,
-      nome,
-      cep,
-      endereco,
-      cidade,
-    });
+    const msg = montarMensagem(
+      items,
+      { local, tamanhoParede, observacoes },
+      { nome, cep, endereco, cidade }
+    );
     if (typeof window !== "undefined" && (window as any).fbq) {
-      (window as any).fbq("track", "Lead", { content_name: "nicho-personalizado" });
+      (window as any).fbq("track", "Lead", {
+        content_name: "nicho-personalizado",
+        num_items: items.length,
+        value: totalPecas,
+      });
     }
     window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, "_blank");
   };
@@ -233,132 +264,187 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
           </h3>
           <p className="text-xs text-gray-500 mt-2 leading-relaxed">
             Preencha as especificações e receba o valor direto no seu WhatsApp.
+            Precisa de nichos com medidas diferentes? Adicione quantos quiser.
           </p>
         </div>
 
         {/* Body scrollable */}
-        <div className="flex-1 overflow-y-auto px-6 pt-5 pb-2 space-y-7">
-          {/* Bloco 1 — Especificações */}
+        <div id="nicho-modal-body" className="flex-1 overflow-y-auto px-6 pt-5 pb-2 space-y-6">
+          {/* Bloco 1 — Nichos (lista) */}
           <div>
             <div className="flex items-baseline justify-between pb-2 mb-3 border-b border-dashed border-gray-200">
               <span className="text-[11px] font-black uppercase tracking-[0.18em] text-black">
-                01 · Especificações do nicho
+                01 · Especificações
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                {items.length} {items.length === 1 ? "nicho" : "nichos"}
               </span>
             </div>
 
-            {/* Dimensões */}
-            <div className="grid grid-cols-3 gap-2 mb-3">
-              {[
-                { label: "Largura", value: largura, setter: setLargura },
-                { label: "Altura", value: altura, setter: setAltura },
-                { label: "Profund.", value: profundidade, setter: setProfundidade },
-              ].map(({ label, value, setter }) => (
-                <div key={label}>
-                  <label className="text-[9px] font-bold text-gray-500 uppercase tracking-wider text-center block mb-1">
-                    {label} <span className="text-[#D12018]">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={value}
-                      onChange={(e) => setter(e.target.value.replace(/\D/g, ""))}
-                      placeholder="0"
-                      className="w-full px-2 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-center text-lg font-black focus:outline-none focus:border-[#D12018] focus:bg-white transition-colors tabular-nums"
-                    />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-gray-400 font-medium pointer-events-none">cm</span>
+            <div className="space-y-4">
+              {items.map((item, idx) => (
+                <div
+                  key={item.id}
+                  className="border border-gray-200 rounded-2xl p-4 bg-gray-50/50 relative"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-black text-black uppercase tracking-wider bg-white border border-gray-200 px-2.5 py-1 rounded-full">
+                      Nicho {idx + 1}
+                    </span>
+                    {items.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removerNicho(item.id)}
+                        className="text-red-500 hover:text-red-700 p-1.5 hover:bg-red-50 rounded-full transition-colors"
+                        aria-label={`Remover nicho ${idx + 1}`}
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Dimensões */}
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {([
+                      { label: "Largura", key: "largura" },
+                      { label: "Altura", key: "altura" },
+                      { label: "Profund.", key: "profundidade" },
+                    ] as { label: string; key: keyof ItemNicho }[]).map(({ label, key }) => (
+                      <div key={key}>
+                        <label className="text-[9px] font-bold text-gray-500 uppercase tracking-wider text-center block mb-1">
+                          {label} <span className="text-[#D12018]">*</span>
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            value={item[key] as string}
+                            onChange={(e) =>
+                              atualizarItem(item.id, key, e.target.value.replace(/\D/g, "") as never)
+                            }
+                            placeholder="0"
+                            className="w-full px-2 py-2.5 bg-white border border-gray-200 rounded-xl text-center text-base font-black focus:outline-none focus:border-[#D12018] transition-colors tabular-nums"
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-gray-400 font-medium pointer-events-none">cm</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Cor */}
+                  <div className="mb-3">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">
+                      Cor / modelo <span className="text-[#D12018]">*</span>
+                    </label>
+                    <select
+                      value={item.cor}
+                      onChange={(e) => atualizarItem(item.id, "cor", e.target.value)}
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#D12018] transition-colors appearance-none cursor-pointer"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23666'%3e%3cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.4a.75.75 0 01-1.08 0l-4.25-4.4a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3e%3c/svg%3e")`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 12px center",
+                        backgroundSize: "18px",
+                      }}
+                    >
+                      <option value="">Selecione…</option>
+                      {CORES_PADRAO.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                    {item.cor === "Outra cor" && (
+                      <input
+                        type="text"
+                        value={item.corOutra}
+                        onChange={(e) => atualizarItem(item.id, "corOutra", e.target.value)}
+                        placeholder="Descreva a cor/material desejado"
+                        className="mt-2 w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#D12018] transition-colors"
+                      />
+                    )}
+                  </div>
+
+                  {/* Borda */}
+                  <div className="mb-3">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">
+                      Tipo de borda <span className="text-[#D12018]">*</span>
+                    </label>
+                    <div className="flex gap-2 flex-wrap">
+                      {([
+                        { v: "simples", l: "Borda simples" },
+                        { v: "dupla", l: "Borda dupla" },
+                        { v: "nao-sei", l: "Não sei" },
+                      ] as { v: BordaOpcao; l: string }[]).map((opt) => (
+                        <button
+                          key={opt.v}
+                          type="button"
+                          onClick={() => atualizarItem(item.id, "borda", opt.v)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all ${
+                            item.borda === opt.v
+                              ? "bg-[#D12018] text-white border-[#D12018]"
+                              : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+                          }`}
+                        >
+                          {opt.l}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quantidade */}
+                  <div>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">
+                      Quantidade <span className="text-[#D12018]">*</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          atualizarItem(
+                            item.id,
+                            "quantidade",
+                            String(Math.max(1, Number(item.quantidade) - 1))
+                          )
+                        }
+                        className="w-9 h-9 rounded-full bg-white border border-gray-200 hover:border-[#D12018] flex items-center justify-center font-black text-gray-600 transition-colors"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={item.quantidade}
+                        onChange={(e) =>
+                          atualizarItem(
+                            item.id,
+                            "quantidade",
+                            e.target.value.replace(/\D/g, "") || "1"
+                          )
+                        }
+                        className="flex-1 px-4 py-2 bg-white border border-gray-200 rounded-xl text-center text-base font-black focus:outline-none focus:border-[#D12018] transition-colors tabular-nums"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          atualizarItem(item.id, "quantidade", String(Number(item.quantidade) + 1))
+                        }
+                        className="w-9 h-9 rounded-full bg-white border border-gray-200 hover:border-[#D12018] flex items-center justify-center font-black text-gray-600 transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
-            </div>
 
-            {/* Cor */}
-            <div className="mb-3">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">
-                Cor / modelo <span className="text-[#D12018]">*</span>
-              </label>
-              <select
-                value={cor}
-                onChange={(e) => setCor(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#D12018] focus:bg-white transition-colors appearance-none cursor-pointer"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23666'%3e%3cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.4a.75.75 0 01-1.08 0l-4.25-4.4a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3e%3c/svg%3e")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 12px center",
-                  backgroundSize: "18px",
-                }}
+              {/* Botão adicionar outro nicho */}
+              <button
+                type="button"
+                onClick={adicionarNicho}
+                className="w-full py-3.5 rounded-2xl border-2 border-dashed border-gray-300 hover:border-[#D12018] hover:bg-red-50/50 text-sm font-bold uppercase tracking-wider text-gray-600 hover:text-[#D12018] transition-all flex items-center justify-center gap-2"
               >
-                <option value="">Selecione…</option>
-                {CORES_PADRAO.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-              {cor === "Outra cor" && (
-                <input
-                  type="text"
-                  value={corOutra}
-                  onChange={(e) => setCorOutra(e.target.value)}
-                  placeholder="Descreva a cor/material desejado"
-                  className="mt-2 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:border-[#D12018] focus:bg-white transition-colors"
-                />
-              )}
-            </div>
-
-            {/* Borda */}
-            <div className="mb-3">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 block">
-                Tipo de borda <span className="text-[#D12018]">*</span>
-              </label>
-              <div className="flex gap-2 flex-wrap">
-                {([
-                  { v: "simples", l: "Borda simples" },
-                  { v: "dupla", l: "Borda dupla" },
-                  { v: "nao-sei", l: "Não sei" },
-                ] as { v: BordaOpcao; l: string }[]).map((opt) => (
-                  <button
-                    key={opt.v}
-                    type="button"
-                    onClick={() => setBorda(opt.v)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold border-2 transition-all ${
-                      borda === opt.v
-                        ? "bg-[#D12018] text-white border-[#D12018]"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
-                    }`}
-                  >
-                    {opt.l}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Quantidade */}
-            <div>
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">
-                Quantidade <span className="text-[#D12018]">*</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setQuantidade(String(Math.max(1, Number(quantidade) - 1)))}
-                  className="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 hover:border-[#D12018] flex items-center justify-center font-black text-lg text-gray-600 transition-colors"
-                >
-                  −
-                </button>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={quantidade}
-                  onChange={(e) => setQuantidade(e.target.value.replace(/\D/g, "") || "1")}
-                  className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-center text-base font-black focus:outline-none focus:border-[#D12018] focus:bg-white transition-colors tabular-nums"
-                />
-                <button
-                  type="button"
-                  onClick={() => setQuantidade(String(Number(quantidade) + 1))}
-                  className="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 hover:border-[#D12018] flex items-center justify-center font-black text-lg text-gray-600 transition-colors"
-                >
-                  +
-                </button>
-              </div>
+                <PlusIcon className="w-4 h-4" />
+                Adicionar outro nicho
+              </button>
             </div>
           </div>
 
@@ -503,6 +589,14 @@ export default function NichoPersonalizadoModal({ aberto, onFechar }: Props) {
 
         {/* Footer fixo */}
         <div className="p-5 border-t border-gray-100 space-y-2 bg-white shrink-0">
+          {items.length > 1 && (
+            <div className="flex justify-between text-xs text-gray-500 font-medium mb-1">
+              <span>Total do pedido</span>
+              <span className="text-black font-black">
+                {totalPecas} {totalPecas === 1 ? "peça" : "peças"} · {items.length} modelos
+              </span>
+            </div>
+          )}
           <button
             onClick={handleEnviar}
             disabled={!podeEnviar}
