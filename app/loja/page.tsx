@@ -9,6 +9,8 @@ import ProductCarousel from "@/components/ProductCarousel";
 import VideoModal from "@/components/VideoModal";
 import Depoimentos from "@/components/Depoimentos";
 import HeroVideoLoop from "@/components/HeroVideoLoop";
+import NichoPersonalizadoCard from "@/components/NichoPersonalizadoCard";
+import NichoPersonalizadoModal from "@/components/NichoPersonalizadoModal";
 import { ShoppingCartIcon, CheckIcon } from "@heroicons/react/24/solid";
 
 type Filtro = "Todos" | "Iris" | "Decora";
@@ -18,6 +20,7 @@ export default function LojaPage() {
   const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
   const [adicionados, setAdicionados] = useState<Set<string>>(new Set());
   const [videoAberto, setVideoAberto] = useState<{ src: string; titulo: string } | null>(null);
+  const [nichoPersonalizadoAberto, setNichoPersonalizadoAberto] = useState(false);
 
   const grupos = useMemo(() => {
     const lista = filtro === "Todos" ? produtos : produtos.filter((p) => p.colecao === filtro);
@@ -279,6 +282,15 @@ export default function LojaPage() {
         </div>
       </section>
 
+      {/* Nichos sob medida — captura reativa após o catálogo */}
+      <section className="max-w-7xl mx-auto px-6 pb-16">
+        <NichoPersonalizadoCard
+          titulo="Não achou o formato ideal?"
+          subtitulo="Fazemos nichos sob medida — tamanho, cor e acabamento do seu jeito. Preencha as especificações e receba o valor no seu WhatsApp."
+          onClick={() => setNichoPersonalizadoAberto(true)}
+        />
+      </section>
+
       {/* Depoimentos */}
       <Depoimentos />
 
@@ -288,6 +300,12 @@ export default function LojaPage() {
         titulo={videoAberto?.titulo || ""}
         video={videoAberto?.src}
         onFechar={() => setVideoAberto(null)}
+      />
+
+      {/* Modal de nicho sob medida */}
+      <NichoPersonalizadoModal
+        aberto={nichoPersonalizadoAberto}
+        onFechar={() => setNichoPersonalizadoAberto(false)}
       />
 
       {/* Carrinho flutuante */}

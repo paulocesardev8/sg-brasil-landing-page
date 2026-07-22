@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,6 +11,8 @@ import {
   ShieldCheckIcon,
   ShoppingBagIcon
 } from '@heroicons/react/24/solid';
+import NichoPersonalizadoCard from "./NichoPersonalizadoCard";
+import NichoPersonalizadoModal from "./NichoPersonalizadoModal";
 
 // --- DADOS DA EMPRESA ---
 const empresa = {
@@ -41,7 +44,8 @@ const colecoes = [
 ];
 
 export default function SalesPage() {
-  
+  const [nichoPersonalizadoAberto, setNichoPersonalizadoAberto] = useState(false);
+
   const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const url = empresa.whatsappLink;
@@ -249,6 +253,29 @@ export default function SalesPage() {
         </div>
       </section>
   
+      {/* 4.25 NICHOS SOB MEDIDA — oferta ativa antes da loja padrão */}
+      <section className="py-16 md:py-20 px-6 bg-[#f8f8f8]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="inline-block bg-[#BA8213] text-black text-[10px] md:text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-widest mb-4">
+              Sob medida
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black text-black uppercase tracking-tight mb-3 leading-tight">
+              Fora do catálogo? <span className="text-[#D12018]">Fazemos pra você.</span>
+            </h2>
+            <p className="text-gray-600 font-medium max-w-2xl mx-auto">
+              Nichos exclusivos, no tamanho e material que seu projeto pede.
+              Preencha as especificações e receba o orçamento no WhatsApp.
+            </p>
+          </div>
+          <NichoPersonalizadoCard
+            titulo="Nichos sob medida pro seu projeto"
+            subtitulo="Formato exclusivo, cor da sua escolha, com ou sem borda. Fale com um especialista e receba valor + prazo de fabricação."
+            onClick={() => setNichoPersonalizadoAberto(true)}
+          />
+        </div>
+      </section>
+
       {/* 4.5 LOJA DE NICHOS — canal complementar de venda por peça */}
       <section className="relative py-20 md:py-28 px-6 bg-black overflow-hidden border-t border-white/5">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
@@ -404,14 +431,20 @@ export default function SalesPage() {
       </section>
 
        <div className="mb-8 flex justify-center">
-            <Image 
+            <Image
               src="/images/logo.png" /* Puxando a versão toda branca! */
-              alt="Logo SG Brasil Porcelanato" 
-              width={250} 
-              height={100} 
+              alt="Logo SG Brasil Porcelanato"
+              width={250}
+              height={100}
               className="object-contain"
             />
           </div>
+
+      {/* Modal de nicho sob medida — compartilhado por todos os cards */}
+      <NichoPersonalizadoModal
+        aberto={nichoPersonalizadoAberto}
+        onFechar={() => setNichoPersonalizadoAberto(false)}
+      />
 
     </div>
   );
